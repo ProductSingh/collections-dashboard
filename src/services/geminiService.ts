@@ -102,14 +102,19 @@ Create a practical script that includes:
 5. Promise to pay commitment and follow-up
 6. Professional closing
 
-IMPORTANT FORMATTING RULES:
-- Use actual values from the customer data, not placeholders
-- No markdown formatting (**, [], etc.)
-- No brackets or placeholders like [Your Name] or [Contact Person]
+CRITICAL FORMATTING REQUIREMENTS:
+- NO markdown formatting (no **, [], *, etc.)
+- NO placeholders like [Agent Name], [Contact Person], [Company Name]
+- NO brackets or parentheses for instructions
+- Write as plain text conversation
+- Use actual values from customer data
 - Write as if speaking directly to the customer
-- Use clean, readable text format
 - Keep it under 200 words and conversational
-- Include specific language about payment commitments and follow-up dates`;
+- Include specific language about payment commitments and follow-up dates
+- Format as a simple conversation, not a script with notes
+
+EXAMPLE FORMAT:
+Good morning, this is calling from Bizcap Collections regarding TechStart Solutions' Business Cash Advance account. I need to discuss your outstanding balance of $18,900 which is now 26 days overdue. Your last payment was received on June 20th. I understand that running a business can be challenging, and I'd like to work with you to find a solution. We have a few options available: full payment today, a structured payment plan, or a partial payment with a commitment for the balance. Can you commit to making a payment by a specific date? I'll follow up with you on that date to confirm receipt. Thank you for your time.`;
 
   try {
     return await callGeminiAPI(prompt);
