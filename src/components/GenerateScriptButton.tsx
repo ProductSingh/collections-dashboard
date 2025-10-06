@@ -11,6 +11,9 @@ export default function GenerateScriptButton({ customer }: GenerateScriptButtonP
   const [script, setScript] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  
+  const isApiConfigured = import.meta.env.VITE_GEMINI_API_KEY && 
+    import.meta.env.VITE_GEMINI_API_KEY !== 'your_gemini_api_key_here';
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -29,9 +32,16 @@ export default function GenerateScriptButton({ customer }: GenerateScriptButtonP
 
   return (
     <div className="space-y-4">
+      {!isApiConfigured && (
+        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-yellow-700 text-sm">
+            ⚠️ Gemini API key not configured. AI features will not work in production.
+          </p>
+        </div>
+      )}
       <button
         onClick={handleGenerate}
-        disabled={loading}
+        disabled={loading || !isApiConfigured}
         className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 disabled:from-slate-400 disabled:to-slate-500 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
       >
         {loading ? (
