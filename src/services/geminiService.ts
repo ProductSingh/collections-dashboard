@@ -92,16 +92,24 @@ export async function generateCallScript(customer: Customer): Promise<string> {
     otherActiveLoans: customer.otherActiveLoans
   };
 
-  const prompt = `Generate a concise, professional debt collection call script for a collections agent. Use this customer data: ${JSON.stringify(customerData, null, 2)}
+  const prompt = `Generate a clean, professional debt collection call script for a collections agent. Use this customer data: ${JSON.stringify(customerData, null, 2)}
 
-Create a short, practical script that includes:
+Create a practical script that includes:
 1. Brief greeting and identification
 2. Specific loan details (product, amount, days overdue)
 3. Key talking points for the agent
 4. 2-3 clear payment options
-5. Professional closing
+5. Promise to pay commitment and follow-up
+6. Professional closing
 
-Format as a simple script with agent notes, not a detailed conversation. Keep it under 200 words and focus on what the collections agent needs to say and remember during the call.`;
+IMPORTANT FORMATTING RULES:
+- Use actual values from the customer data, not placeholders
+- No markdown formatting (**, [], etc.)
+- No brackets or placeholders like [Your Name] or [Contact Person]
+- Write as if speaking directly to the customer
+- Use clean, readable text format
+- Keep it under 200 words and conversational
+- Include specific language about payment commitments and follow-up dates`;
 
   try {
     return await callGeminiAPI(prompt);
@@ -109,21 +117,23 @@ Format as a simple script with agent notes, not a detailed conversation. Keep it
     return `Failed to generate call script: ${error instanceof Error ? error.message : 'Unknown error'}
 
 Fallback Script:
----
-**Opening:** "Good [morning/afternoon], this is [Your Name] from Bizcap Collections. I'm calling regarding ${customer.businessName}'s ${customer.loanProduct} account."
 
-**Key Details:**
-- Amount: $${customer.amountDue.toLocaleString()}
-- Days Overdue: ${customer.daysOverdue}
-- Last Payment: ${customer.lastPaymentDate}
-- Risk Level: ${customer.riskLevel}
+Good morning, this is calling from Bizcap Collections regarding ${customer.businessName}'s ${customer.loanProduct} account.
 
-**Payment Options:**
-1. Full payment today: $${customer.amountDue.toLocaleString()}
-2. Payment plan: Discuss terms based on their situation
-3. Partial payment: Minimum amount to show commitment
+I need to discuss your outstanding balance of $${customer.amountDue.toLocaleString()} which is now ${customer.daysOverdue} days overdue. Your last payment was received on ${customer.lastPaymentDate}.
 
-**Closing:** "I'd like to work with you to find a solution that works for your business. What option would work best for your current situation?"`;
+I understand that running a business can be challenging, and I'd like to work with you to find a solution that works for your situation.
+
+We have a few options available:
+1. Full payment of $${customer.amountDue.toLocaleString()} today
+2. A structured payment plan over the next few weeks
+3. A partial payment today with a commitment for the balance
+
+I need to get a commitment from you today. Can you commit to making a payment by a specific date? If so, what date can you commit to and what amount?
+
+I'll note this commitment in our system and follow up with you on that date. If you can't make the payment as promised, please call me before that date so we can discuss alternatives.
+
+Thank you for your time, and I look forward to resolving this together.`;
   }
 }
 
