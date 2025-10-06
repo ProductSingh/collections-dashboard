@@ -30,7 +30,12 @@ async function callGeminiAPI(prompt: string): Promise<string> {
   lastCallTime = Date.now();
 
   if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_gemini_api_key_here') {
-    throw new Error('Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.');
+    console.error('Gemini API Key Status:', {
+      hasKey: !!GEMINI_API_KEY,
+      keyValue: GEMINI_API_KEY ? `${GEMINI_API_KEY.substring(0, 10)}...` : 'undefined',
+      isDefault: GEMINI_API_KEY === 'your_gemini_api_key_here'
+    });
+    throw new Error('Gemini API key not configured. Please configure VITE_GEMINI_API_KEY in your environment variables.');
   }
 
   try {
