@@ -92,16 +92,16 @@ export async function generateCallScript(customer: Customer): Promise<string> {
     otherActiveLoans: customer.otherActiveLoans
   };
 
-  const prompt = `Generate a professional, empathetic debt collection call script based on this customer data: ${JSON.stringify(customerData, null, 2)}
+  const prompt = `Generate a concise, professional debt collection call script for a collections agent. Use this customer data: ${JSON.stringify(customerData, null, 2)}
 
-Include:
-1. A warm greeting addressing the business name
-2. Context about the overdue payment with specific amounts and dates
-3. Empathetic acknowledgment of potential business challenges
-4. Clear repayment options (full payment, payment plan, partial payment)
-5. A professional closing that maintains the relationship
+Create a short, practical script that includes:
+1. Brief greeting and identification
+2. Specific loan details (product, amount, days overdue)
+3. Key talking points for the agent
+4. 2-3 clear payment options
+5. Professional closing
 
-Keep the tone respectful and solution-oriented.`;
+Format as a simple script with agent notes, not a detailed conversation. Keep it under 200 words and focus on what the collections agent needs to say and remember during the call.`;
 
   try {
     return await callGeminiAPI(prompt);
@@ -110,20 +110,20 @@ Keep the tone respectful and solution-oriented.`;
 
 Fallback Script:
 ---
-Good [morning/afternoon], this is [Your Name] from Bizcap Collections calling for ${customer.businessName}.
+**Opening:** "Good [morning/afternoon], this is [Your Name] from Bizcap Collections. I'm calling regarding ${customer.businessName}'s ${customer.loanProduct} account."
 
-I'm reaching out regarding your ${customer.loanProduct} account which has a payment of $${customer.amountDue.toLocaleString()} that was due on ${customer.dueDate}. This payment is now ${customer.daysOverdue} days overdue.
+**Key Details:**
+- Amount: $${customer.amountDue.toLocaleString()}
+- Days Overdue: ${customer.daysOverdue}
+- Last Payment: ${customer.lastPaymentDate}
+- Risk Level: ${customer.riskLevel}
 
-I understand that businesses sometimes face cash flow challenges. I'd like to work with you to find a solution that works for your situation.
+**Payment Options:**
+1. Full payment today: $${customer.amountDue.toLocaleString()}
+2. Payment plan: Discuss terms based on their situation
+3. Partial payment: Minimum amount to show commitment
 
-We have several options available:
-1. Full payment of $${customer.amountDue.toLocaleString()} today
-2. A structured payment plan over the next few weeks
-3. A partial payment today with a commitment for the balance
-
-What works best for your current situation?
-
-Thank you for your time, and I look forward to resolving this together.`;
+**Closing:** "I'd like to work with you to find a solution that works for your business. What option would work best for your current situation?"`;
   }
 }
 
